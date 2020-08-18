@@ -1,0 +1,124 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card">
+    <div class="layui-card-header layui-bg-cyan">接口列表</div>
+    <div class="layui-card-body">
+        <div class="layui-form">
+            <table class="layui-hide" id="treeTable" lay-filter="treeTable"></table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <a href="{:url('add')}" class="layui-btn layui-btn-sm layui-iframe" title="添加接口">添加接口</a>
+        <a class="layui-btn layui-btn-sm layui-btn-normal" id="openAll">展开或折叠全部</a>
+        <a href="{:url('all')}" class="layui-btn layui-btn-sm layui-iframe" title="全部接口">全部接口</a>
+        <a href="{:url('apis')}" class="layui-btn layui-btn-sm layui-iframe" title="更新接口">更新接口</a>
+    </div>
+</script>
+
+<script type="text/html" id="titleTpl">
+    <span data-lake-tip="" lay-title="{{ d.description ? d.description : '' }}">{{ d.title }}</span>
+</script>
+<script type="text/html" id="addTimeTpl">
+    {{!d.add_time?'':layui.util.toDateString(d.add_time * 1000, 'yyyy-MM-dd HH:mm:ss') }}
+</script>
+
+<script type="text/html" id="status">
+    <input type="checkbox" name="status" value="{{ d.id }}" lay-skin="switch" lay-text="启用|禁用" lay-filter="status" {{ d.status == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="action">
+    <a href="{:url('detail')}?id={{d.id}}" class="layui-btn layui-btn-xs layui-btn-normal layui-iframe" lay-data="{width: '80%', height: '95%'}" title="接口详情">详情</a>
+    <a href="{:url('edit')}?id={{d.id}}" class="layui-btn layui-btn-xs layui-iframe" title="编辑">编辑</a>
+    <a href='{:url("add")}?parentid={{ d.id }}' class="layui-btn layui-btn-xs layui-btn-primary layui-iframe" title="新增接口">添加</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+<script>
+var treeGrid = null;
+layui.use(['table', 'treeGrid'], function() {
+    var $ = layui.$,
+        treeGrid = layui.treeGrid,
+        tableId = 'treeTable',
+        ptable = null;
+        
+    ptable = treeGrid.render({
+        id: tableId,
+        elem: '#' + tableId,
+        toolbar: '#toolbar',
+        idField: 'id',
+        url: "{:url('index')}",
+        cellMinWidth: 100,
+        treeId: 'id', //树形id字段名称
+        treeUpId: 'parentid', //树形父id字段名称
+        treeShowName: 'title', //以树形式显示的字段
+        cellMinWidth: '150',
+        height: '', // full-140
+        isFilter: false,
+        iconOpen: false, //是否显示图标【默认显示】
+        isOpenDefault: false, //节点默认是展开还是折叠【默认展开】
+        onDblClickRow: false, //去除双击事件
+        cols: [
+            [
+                {field: 'listorder', align: 'center', width: 60, title: '排序', edit: 'text' },
+                {field: 'title', title: '名称', width: 150, templet: '#titleTpl'},
+                {field: 'url', title: '接口', minWidth: 120},
+                {field: 'method', title: '请求类型', width: 100},
+                {field: 'add_time', title: '添加时间', width: 160, toolbar: '#addTimeTpl'},
+                {field: 'status', align: 'center',title: '状态', width: 120,toolbar: '#status'},
+                {title: '操作', width: 200, align: 'center', toolbar: '#action'}
+            ]
+        ],
+        page: false
+    })
+
+    //监听单元格编辑
+    treeGrid.on('edit(treeTable)', function(obj) {
+        var value = obj.value,
+            data = obj.data;
+        $.post('{:url("listorder")}', { 'id': data.id, 'value': value }, function(data) {
+            if (data.code == 1) {
+                layer.msg(data.msg);
+            } else {
+                layer.msg(data.msg);
+            }
+
+        })
+    });
+
+    $('#openAll').click(function(e) {
+        var treedata = treeGrid.getDataTreeList(tableId);
+        treeGrid.treeOpenAll(tableId, !treedata[0][treeGrid.config.cols.isOpen]);
+    })
+
+    treeGrid.on('tool(treeTable)', function(obj) {
+        var data = obj.data;
+        if (obj.event === 'delete') {
+            layer.confirm('您确定要删除该接口吗？', function(index){
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post("{:url('delete')}",{id:data.id},function(res){
+                    layer.close(loading);
+                    if (res.code === 1) {
+                        layer.msg(res.msg,{time:1000,icon:1});
+                        location.reload();
+                    } else {
+                        layer.msg(res.msg,{time:1000,icon:2});
+                    }
+                    layer.close(index);
+                }).error(function() {
+                    layer.close(loading);
+                    layer.msg('操作失败！',{time:1000,icon:2}, function() {
+                        layer.close(index);
+                    });
+                });
+            });
+        }
+    });
+
+});
+</script>
+{/block}

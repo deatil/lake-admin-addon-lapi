@@ -1,0 +1,150 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card layui-anim layui-anim-upbit">
+    <div class="layui-card-header layui-bg-cyan">接口日志</div>
+    <div class="layui-card-body">
+        <blockquote class="layui-elem-quote">
+            <form class="layui-form lake-admin-search-form" lay-filter="app-log-form">
+                <div class="layui-inline">
+                    <input class="layui-input" name="key" id="key" placeholder="请输入关键字">
+                </div>
+                
+                <div class="layui-inline">
+                    <input type="text" value="" placeholder='开始时间' autocomplete="off" class="layui-input app-log-start-time">
+                </div>
+                
+                <div class="layui-inline">
+                    <input type="text" value="" placeholder='结束时间' autocomplete="off" class="layui-input app-log-end-time">
+                </div>
+                
+                <div class="layui-inline">
+                    <button class="layui-btn" id="search" data-type="reload">搜索</button>
+                </div>
+                
+                <div class="layui-inline">
+                    <a href="{:url('index')}" class="layui-btn">显示全部</a>
+                </div>
+            </form>
+        </blockquote>
+        
+        <table class="layui-table" id="list" lay-filter="list"></table>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/html" id="toolbar">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="clear">清除20天前记录</button>
+  </div>
+</script>
+<script type="text/html" id="action">
+    <a href="javascript:;" class="layui-btn layui-btn-xs" lay-event="view">详情</a>
+</script>
+<script type="text/html" id="appNameTpl">
+    {{ d.app_name ? d.app_name : 'error' }}
+</script>
+<script>
+    layui.use(['table', 'form', 'laydate'], function() {
+        var table = layui.table,
+            form = layui.form, 
+            laydate = layui.laydate,
+            $ = layui.jquery;
+        
+        // 时间
+        laydate.render({
+            elem: '.app-log-start-time',
+            type: 'datetime',
+        });
+        laydate.render({
+            elem: '.app-log-end-time',
+            type: 'datetime',
+        });
+            
+        var tableIn = table.render({
+            id: 'tableid',
+            elem: '#list',
+            url: '{:url("index")}',
+            method: 'post',
+            toolbar: '#toolbar',
+            page: true,
+            cols: [[
+                {field: 'id', title: 'ID', width: 100, fixed: 'left', align: 'center'},
+                {field: 'app_name', title: '客户端', width: 150, toolbar: '#appNameTpl'},
+                {field: 'url', title: '访问链接'},
+                {field: 'add_time', title: '访问时间', width: 180},
+                {title: '操作', width: 120, toolbar: '#action'}
+            ]],
+            limit: 20, //每页默认显示的数量
+        });	
+        
+        // 搜索
+        $('#search').on('click', function() {
+            var key = $('#key').val();
+            var start_time = $('.app-log-start-time').val();
+            var end_time = $('.app-log-end-time').val();
+                
+            tableIn.reload({ 
+                page: {page: 1},
+                where: {
+                    key: key,
+                    start_time: start_time,
+                    end_time: end_time,
+                }
+            });
+            
+            return false;
+        });
+        
+        // 头工具栏事件
+        table.on('toolbar(list)', function(obj) {
+            switch(obj.event){
+                case 'clear':
+                    layer.confirm('您确定要清除20天前记录吗？', function(index){
+                        var loading = layer.load(1, {shade: [0.1, '#fff']});
+                        $.post("{:url('clear')}",{},function(res){
+                            layer.close(loading);
+                            if (res.code === 1) {
+                                layer.msg(res.msg, {
+                                    time: 1000,
+                                    icon: 1,
+                                }, function() {
+                                    tableIn.reload();
+                                });
+                            } else {
+                                layer.msg('操作失败！', {
+                                    time: 1000,
+                                    icon: 2,
+                                });
+                            }
+                        });
+                        layer.close(index);
+                    });	
+                    break;
+            };
+        });	
+        
+        // 详情
+        table.on('tool(list)', function(obj) {
+            var data = obj.data;
+            console.log(obj.event);
+            if (obj.event === 'view') {			
+                var url = "{:url('view')}?id=" + data.id;
+                var title = '记录详情';
+                
+                var index = layer.open({
+                    type: 2,
+                    title: title,
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true,
+                    area: ['85%', '95%'],
+                    content: url,
+                });
+            }
+        });
+        
+    });
+</script>
+{/block}

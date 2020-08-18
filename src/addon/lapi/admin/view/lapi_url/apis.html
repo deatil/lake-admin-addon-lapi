@@ -1,0 +1,109 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card">
+    <div class="layui-card-header layui-bg-cyan">模块管理</div>
+    <div class="layui-card-body">
+        <table class="layui-hide" id="table" lay-filter="table"></table>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-sm js-module-action-btn" href="javascript:;" data-url="{:url('apisupdate')}" data-module="api">更新API模块</a>
+    </div>
+</script>
+
+<script type="text/html" id="iconTpl">
+    <a href="javascript:void(0);" title="{{ d.name }}">
+        <img src="{{ d.icon }}" class="module-icon js-module-icon" style="height: 100%;" />
+    </a>
+</script>
+<script type="text/html" id="versionTpl">
+    {{ d.version }} 
+</script>
+<script type="text/html" id="installtimeTpl">
+    {{# if(d.installtime){ }} 
+        {{ layui.util.toDateString(d.installtime * 1000) }}
+    {{#  } else { }} 
+        --
+    {{#  } }}
+</script>
+
+<script type="text/html" id="actionTpl">
+    <a class="layui-btn layui-btn-xs js-module-action-btn" href="javascript:;" data-url="{:url('apisupdate')}" data-module="{{ d.module }}">更新接口</a>
+</script>
+
+
+<script>
+layui.use(['table', 'upload'], function() {
+    var table = layui.table,
+        $ = layui.$,
+        upload = layui.upload;
+        
+    table.render({
+        elem: '#table',
+        toolbar: '#toolbar',
+        url: '{:url("apis")}',
+        cols: [
+            [
+                { field: 'icon', width: 90, style: 'height: 100%;max-width:100%;', align: 'center', title: '模块标识', templet: '#iconTpl' },
+                { field: 'module', width: 150, title: '模块ID', templet: '#idTpl' },
+                { field: 'name', minWidth: 150, title: '名称' },
+                { field: 'version', width: 100, title: '版本', templet: '#versionTpl' },
+                { field: 'installtime', width: 180, title: '安装时间', templet: '#installtimeTpl' },
+                { fixed: 'right', width: 100, title: '操作', templet: '#actionTpl' }
+            ]
+        ],
+        page: 10,
+    });
+
+    /**
+     * 显示icon
+     *
+     * @create 2019-11-23
+     * @author deatil
+     */
+    $("body").on('click', ".js-module-icon", function() {
+        var icon = $(this).attr('src');
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim',
+            area: ['auto'],
+            title: false,
+            shadeClose: true,
+            end: function(index, layero) {
+                return false;
+            },
+            content: '<div style="display: flex;align-items: center;justify-content: center;text-align: justify;height: 100%;"><img src="' + icon + '" /></div>',
+        });
+    });
+    
+    $("body").on('click', ".js-module-action-btn", function() {
+        var url = $(this).attr("data-url");
+        var module = $(this).attr("data-module");
+        
+        layer.confirm("确定要更新该模块接口吗？", function(index){
+            var loading = layer.load(1, {shade: [0.1, '#fff']});
+            $.post(url, {module: module},function(res){
+                layer.close(loading);
+                if (res.code === 1) {
+                    layer.msg(res.msg, {time:1000, icon:1}, function() {
+                        location.reload();
+                    });
+                }else{
+                    layer.msg(res.msg, {time:1000, icon:2});
+                }
+            }).error(function() {
+                layer.close(loading);
+                layer.msg('操作失败！', {time:1000, icon:2});
+            });
+            
+            layer.close(index);
+        });
+    });
+});
+</script>
+{/block}

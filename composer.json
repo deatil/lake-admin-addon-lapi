@@ -1,0 +1,39 @@
+{
+    "name": "lake/lake-admin-addon-lapi",
+    "description": "The lake-admin-addon-lapi is an addon package for lake-admin.",
+    "license": "Apache-2.0",
+    "type": "library",
+    "keywords": [
+        "lake",
+        "admin",
+        "lake-admin",
+        "addon",
+        "api",
+        "lapi"
+    ],
+    "homepage": "https://github.com/deatil",
+    "authors": [
+        {
+            "name": "deatil",
+            "email": "deatil@github.com",
+            "homepage": "https://github.com/deatil"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\lapi\\": "src/addon/lapi"
+        },
+        "files": [
+        ]
+    },
+    "extra": {
+        "think":{
+            "services":[
+                "app\\lapi\\boot\\Service"
+            ]
+        }
+    }
+}

@@ -1,0 +1,98 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card layui-anim layui-anim-upbit" ng-app="hd" ng-controller="ctrl">
+    <div class="layui-card-header layui-bg-cyan">授权设置</div>
+    <div class="layui-card-body">
+        <form class="layui-form" method="post">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">API状态</label>
+                <div class="layui-input-block w500">
+                    <input type="radio" name="api_close" ng-model="field.api_close" ng-checked="field.api_close==0" ng-value="0" title="启用">
+                    <input type="radio" name="api_close" ng-model="field.api_close" ng-checked="field.api_close==1" ng-value="1" title="关闭维护">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        设置API的启用状态，默认：启用
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">API维护理由</label>
+                <div class="layui-input-block w500">
+                    <textarea name="api_close_tip" ng-model="field.api_close_tip" placeholder="请输入API维护理由" class="layui-textarea"></textarea>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        设置API关闭维护的原因，当API关闭维护时不能为空
+                    </div>
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">Appid前缀</label>
+                <div class="layui-input-block w500">
+                    <input type="text" name="api_app_pre" ng-model="field.api_app_pre" lay-verify="required" placeholder="请输入Appid前缀" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        设置app的appid前缀
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">记录日志</label>
+                <div class="layui-input-block w500">
+                    <input type="radio" name="open_putlog" ng-model="field.open_putlog" ng-checked="field.open_putlog==1" ng-value="1" title="启用">
+                    <input type="radio" name="open_putlog" ng-model="field.open_putlog" ng-checked="field.open_putlog==0" ng-value="0" title="禁用">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        是否启用日志记录，默认启用。记录日志关闭后，请求数量限制将会失效
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="submit">保存设置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="{:lake_module_static('/lapi/js/angular.min.js')}"></script>
+<script>
+    var m = angular.module('hd',[]);
+    m.controller('ctrl',function($scope) {
+        $scope.field = {$setting|raw};
+        
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form, layer = layui.layer,$= layui.jquery;
+
+            form.on('submit(submit)', function (data) {
+                // 提交到方法 默认为本身
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                $.post("", data.field, function (res) {
+                    layer.close(loading);
+                    if (res.code > 0) {
+                        layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                            location.href = res.url;
+                        });
+                    } else {
+                        layer.msg(res.msg, {time: 1800, icon: 2});
+                    }
+                }).error(function() {
+                    layer.close(loading);
+                });
+            })
+        });
+    });
+</script>
+{/block}

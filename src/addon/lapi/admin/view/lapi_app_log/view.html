@@ -1,0 +1,121 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="admin-main layui-anim layui-anim-upbit" ng-app="hd" ng-controller="ctrl">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>记录详情</legend>
+    </fieldset>
+    
+    <div class="layui-card">
+        <div class="layui-card-header">记录详情</div>
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col>
+                    <col width="350">
+                <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>内容</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>记录ID</td>
+                        <td>{$api_app_log['id']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>APPID</td>
+                        <td>{$api_app['app_id']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>客户端</td>
+                        <td>{$api_app['name']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求接口</td>
+                        <td>{$api_app_log['api']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求链接</td>
+                        <td class="break-all">{$api_app_log['url']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求类型</td>
+                        <td class="break-all">{$api_app_log['method']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求来源</td>
+                        <td>{$api_app_log['useragent']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求来源系统</td>
+                        <td>{$api_app_log['agent_os']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求来源浏览器</td>
+                        <td>{$api_app_log['agent_browser']}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求头</td>
+                        <td>
+                            <div class="layui-row">
+                                {volist name=":json_decode($api_app_log['header'], true)" id="vo" key="k"}
+                                    <div class="layui-col-md3">
+                                        <span class="layui-badge layui-bg-green">{$key}</span>
+                                    </div>
+                                    <div class="layui-col-md9">
+                                        {$vo}
+                                    </div>
+                                {/volist}
+                            </div>
+                        </td>
+                        <td><span style="color:red;">api记录的header数据</span></td>
+                    </tr>
+                    <tr>
+                        <td>数据</td>
+                        <td>
+                            <div class="layui-row">
+                                {volist name=":json_decode($api_app_log['payload'], true)" id="vo" key="k"}
+                                    <div class="layui-col-md3">
+                                        <span class="layui-badge layui-bg-green">{$key}</span>
+                                    </div>
+                                    <div class="layui-col-md9">
+                                        {$vo}
+                                    </div>
+                                {/volist}
+                            </div>
+                        </td>
+                        <td><span style="color:red;">api记录的访问数据</span></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>请求时间</td>
+                        <td>{:date('Y-m-d H:i:s', $api_app_log['add_time'])}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>请求IP</td>
+                        <td>{$api_app_log['add_ip']}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+{/block}

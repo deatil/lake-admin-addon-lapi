@@ -1,0 +1,110 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card">
+    <div class="layui-card-header layui-bg-cyan">接口详情</div>
+    <div class="layui-card-body">
+        <div class="table-responsive">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="200">
+                    <col>
+                </colgroup>
+          
+                <thead>
+                    <tr>
+                        <td>名称</td>
+                        <td>内容</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>接口ID</td>
+                        <td class="break-all">{$data.id}</td>
+                    </tr>
+                    {if !empty($parent)}
+                    <tr>
+                        <td>父级接口名</td>
+                        <td class="break-all">
+                            {$parent.title}
+                            [{$parent.method}：{$parent.url}]
+                        </td>
+                    </tr>
+                    {/if}
+                    <tr>
+                        <td>接口名</td>
+                        <td class="break-all">{$data.title}</td>
+                    </tr>
+                    <tr>
+                        <td>接口链接</td>
+                        <td class="break-all">{$data.url}</td>
+                    </tr>
+                    <tr>
+                        <td>请求方式</td>
+                        <td>{$data.method}</td>
+                    </tr>
+                    <tr>
+                        <td>请求字段</td>
+                        <td class="break-all lapi-url-request js-lapi-url-request">{$data.request}</td>
+                    </tr>
+                    <tr>
+                        <td>响应字段</td>
+                        <td class="break-all lapi-url-response js-lapi-url-response">{$data.response}</td>
+                    </tr>
+                    <tr>
+                        <td>接口描述</td>
+                        <td>{$data.description}</td>
+                    </tr>
+                    <tr>
+                        <td>排序</td>
+                        <td>{$data.listorder}</td>
+                    </tr>
+                    <tr>
+                        <td>状态</td>
+                        <td>
+                            {if $data['status'] == 1}
+                                <span class='layui-badge-dot layui-bg-green'></span>
+                                <span class='text-green'>启用</span>
+                            {else/}
+                                <span class='layui-badge-dot layui-bg-orange'></span>
+                                <span class='text-orange'>禁用</span>
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>添加时间</td>
+                        <td>
+                            {:date('Y-m-d H:i:s', $data['add_time'])}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>最后更新时间</td>
+                        <td>
+                            {:date('Y-m-d H:i:s', $data['edit_time'])}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+var treeGrid = null;
+layui.use(['jqueryJSONView'], function() {
+    var $ = layui.$;
+    
+    var requestJson = $(".lapi-url-request").text();
+    if (requestJson) {
+        $(".lapi-url-request").JSONView(requestJson);
+    }
+    
+    var responseJson = $(".lapi-url-response").text();
+    if (responseJson) {
+        $(".lapi-url-response").JSONView(responseJson);
+    }
+});
+</script>
+{/block}

@@ -8,7 +8,7 @@
 
 ## 使用方法 
 
-*  正确安装了 `lake-admin` 后台
+*  正确安装了 `lake-admin` 后台管理系统
 *  `composer require lake/lake-admin-addon-lapi`，然后选择最新版本
 *  进入后台安装该模块
 

@@ -1,0 +1,171 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card layui-anim layui-anim-upbit" ng-app="hd" ng-controller="ctrl">
+    <div class="layui-card-header layui-bg-cyan">编辑授权</div>
+    <div class="layui-card-body">
+        <form class="layui-form" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block w300">
+                    <input type="text" name="name" ng-model="field.name" lay-verify="required" placeholder="请输入授权名称" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：授权名称
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">app_id</label>
+                <div class="layui-input-block w300">
+                    <input type="text" ng-model="field.app_id" disabled class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        更新状态 <span class="layui-badge layui-bg-green">app_id</span> 不能被修改
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">app_secret</label>
+                <div class="layui-input-block w300">
+                    <input type="text" ng-model="field.app_secret" disabled class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        更新状态 <span class="layui-badge layui-bg-green">app_secret</span> 不能被修改
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">更新secret</label>
+                <div class="layui-input-block w300">
+                    <input type="radio" name="update_secret" ng-model="field.update_secret" ng-checked="field.update_secret==1" ng-value="1" title="启用">
+                    <input type="radio" name="update_secret" ng-model="field.update_secret" ng-checked="field.update_secret==0" ng-value="0" title="禁用">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        当secret泄露的时候更新，通常不需要更新
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">授权描述</label>
+                <div class="layui-input-block w300">
+                    <textarea name="description" ng-model="field.description" placeholder="请输入授权描述" class="layui-textarea"></textarea>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        选填：添加授权描述
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">跨域</label>
+                <div class="layui-input-block w300">
+                    <input type="radio" name="allow_origin" ng-model="field.allow_origin" ng-checked="field.allow_origin==1" ng-value="1" title="启用">
+                    <input type="radio" name="allow_origin" ng-model="field.allow_origin" ng-checked="field.allow_origin==0" ng-value="0" title="禁用">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        跨域跟API用在网页端相关
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">签名检测</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="is_check" ng-model="field.is_check" ng-checked="field.is_check==1" ng-value="1" title="启用">
+                        <input type="radio" name="is_check" ng-model="field.is_check" ng-checked="field.is_check==0" ng-value="0" title="禁用">
+                    </div>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        是否用于对api接口进行签名检测，默认需要带appid
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">签名位置</label>
+                <div class="layui-input-block w500">
+                    <input type="radio" name="sign_postion" ng-model="field.sign_postion" ng-checked="field.sign_postion=='param'" value="param" title="参数(param)">
+                    <input type="radio" name="sign_postion" ng-model="field.sign_postion" ng-checked="field.sign_postion=='header'" value="header" title="头部(header)">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        签名字符所放置的位置
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">检测类型</label>
+                <div class="layui-input-block w500">
+                    <input type="radio" name="check_type" ng-model="field.check_type" ng-checked="field.check_type=='MD5'" value="MD5" title="MD5">
+                    <input type="radio" name="check_type" ng-model="field.check_type" ng-checked="field.check_type=='SHA256'" value="SHA256" title="SHA256">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        设置检测类型，目前支持 <span class="layui-badge layui-bg-green">md5</span> 及 <span class="layui-badge layui-bg-green">sha256</span> 签名
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block w300">
+                    <input type="radio" name="status" ng-model="field.status" ng-checked="field.status==1" ng-value="1" title="启用">
+                    <input type="radio" name="status" ng-model="field.status" ng-checked="field.status==0" ng-value="0" title="禁用">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="{:lake_module_static('/lapi/js/angular.min.js')}"></script>
+<script>
+    var m = angular.module('hd',[]);
+    m.controller('ctrl',function($scope) {
+        $scope.field = {$info|raw};
+        $scope.field.update_secret = 0;
+        
+        layui.use(['form', 'layer'], function () {
+            var form = layui.form, layer = layui.layer,$= layui.jquery;
+
+            form.on('submit(submit)', function (data) {
+                // 提交到方法 默认为本身
+                var loading = layer.load(1, {shade: [0.1, '#fff']});
+                data.field.id = $scope.field.id;
+                $.post("", data.field, function (res) {
+                    layer.close(loading);
+                    if (res.code > 0) {
+                        layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                            parent.location.reload();
+                        });
+                    } else {
+                        layer.msg(res.msg, {time: 1800, icon: 2});
+                    }
+                });
+            })
+        });
+    });
+</script>
+{/block}

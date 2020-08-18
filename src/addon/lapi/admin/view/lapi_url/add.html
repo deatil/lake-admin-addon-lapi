@@ -1,0 +1,118 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card layui-anim layui-anim-upbit">
+    <div class="layui-card-header layui-bg-cyan">添加授权</div>
+    <div class="layui-card-body">
+        <form class="layui-form" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    上级接口
+                </label>
+                <div class="layui-input-block w300">
+                    <select name="parentid" lay-verify="required">
+                        <option value="0">作为一级接口</option>
+                        {$parents|raw}
+                    </select>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">选择上级接口，主要是为了方便接口管理</div>
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    名称
+                </label>
+                <div class="layui-input-block w300">
+                    <input type="text" name="title" lay-verify="required" placeholder="请输入接口名称" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口名称
+                    </div>
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    接口链接
+                </label>
+                <div class="layui-input-block w300">
+                    <input type="text" name="url" lay-verify="required" placeholder="请输入接口链接" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口链接。格式：模块/控制器/操作
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-item-hide">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    请求类型
+                </label>
+                <div class="layui-input-block w300">
+                    <select name="method" lay-verify="required">
+                        <option></option>
+                        <option value="GET" selected>GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="PATCH">PATCH</option>
+                    </select>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口请求类型
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" checked="checked" title="启用">
+                        <input type="radio" name="status" value="0" title="禁用">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+layui.use(['form', 'layer'], function () {
+    var form = layui.form, layer = layui.layer,$= layui.jquery;
+    
+    form.on('submit(submit)', function (data) {
+        // 提交到方法 默认为本身
+        var loading = layer.load(1, {shade: [0.1, '#fff']});
+        $.post("", data.field, function (res) {
+            layer.close(loading);
+            if (res.code == 1) {
+                layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                    parent.location.reload();
+                });
+            } else {
+                layer.msg(res.msg, {time: 1800, icon: 2});
+            }
+        });
+    })
+});
+</script>
+{/block}

@@ -1,0 +1,193 @@
+{extend name="$lake_admin_layout"/}
+
+{block name="main"}
+<div class="layui-card layui-anim layui-anim-upbit" ng-app="hd" ng-controller="ctrl">
+    <div class="layui-card-header layui-bg-cyan">编辑授权</div>
+    <div class="layui-card-body">
+        <form class="layui-form" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    上级接口
+                </label>
+                <div class="layui-input-block w350">
+                    <select name="parentid" lay-verify="required">
+                        <option value="0">作为一级接口</option>
+                        {$parents|raw}
+                    </select>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">选择上级接口，主要是为了方便接口管理</div>
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block w350">
+                    <input type="text" name="title" value="{$info.title}" lay-verify="required" placeholder="请输入接口名称" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口名称
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">接口链接</label>
+                <div class="layui-input-block w350">
+                    <input type="text" name="url" value="{$info.url}" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口链接。格式：模块/控制器/操作
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-item-hide">
+                <label class="layui-form-label">
+                    <span class="text-red font-weight-bold">*</span>
+                    请求类型
+                </label>
+                <div class="layui-input-block w350">
+                    <select name="method" lay-verify="required">
+                        <option></option>
+                        <option value="GET" {if $info.method=='GET'}selected{/if}>GET</option>
+                        <option value="POST" {if $info.method=='POST'}selected{/if}>POST</option>
+                        <option value="PUT" {if $info.method=='PUT'}selected{/if}>PUT</option>
+                        <option value="DELETE" {if $info.method=='DELETE'}selected{/if}>DELETE</option>
+                        <option value="PATCH" {if $info.method=='PATCH'}selected{/if}>PATCH</option>
+                    </select>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口请求类型
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">请求字段</label>
+                <div class="layui-input-block">
+                    <div id="request_box"></div>
+                    <textarea name="request" 
+                        data-el="#request_box" 
+                        data-main="#fieldlist_main" 
+                        data-template="#fieldlist_tpl" 
+                        class="layui-form-fieldlist layui-hide">{$info.request}</textarea>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        选填：接口请求字段，字段请不要用数字
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">响应字段</label>
+                <div class="layui-input-block">
+                    <div id="response_box"></div>
+                    <textarea name="response" 
+                        data-el="#response_box" 
+                        data-main="#fieldlist_main" 
+                        data-template="#fieldlist_tpl" 
+                        class="layui-form-fieldlist layui-hide">{$info.response}</textarea>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        选填：接口响应字段，字段请不要用数字
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">接口描述</label>
+                <div class="layui-input-block w350">
+                    <textarea name="description" placeholder="请输入接口描述" class="layui-textarea">{$info.description}</textarea>
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        选填：接口描述
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block w350">
+                    <input type="text" name="listorder" value="{$info.listorder|default='100'}" class="layui-input">
+                </div>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">
+                        必填：接口链接排序，正序显示
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block w350">
+                    <input type="radio" name="status" value="1" title="正常" {if $info.status==1}checked{/if}>
+                    <input type="radio" name="status" value="0" title="禁止" {if $info.status==0}checked{/if}>
+                </div>
+            </div>
+
+            <input type="hidden" value="{$info.id}" name="id" />
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script id="fieldlist_main" type="text/html">
+    <dl class="fieldlist layui-fieldlist">
+        <dd class="fieldlist-head">
+            <span>字段</span>
+            <span>内容</span>
+        </dd>
+        <dd class="fieldlist-btns">
+            <a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-success btn-append">
+                <i class="iconfont icon-add"></i> 添加
+            </a>
+        </dd>
+    </dl>
+</script>
+<script id="fieldlist_tpl" type="text/html">
+    <dd class="fieldlist-item">
+        <ins><input type="text" data-name="{{d.name}}[{{d.index}}][key]" value="{{d.row.key?d.row.key:''}}" placeholder="填写字段" class="layui-input"/></ins>
+        <ins><input type="text" data-name="{{d.name}}[{{d.index}}][value]" value="{{d.row.value?d.row.value:''}}" placeholder="填写内容" class="layui-input"/></ins>
+        
+        <span class="layui-btn layui-btn-sm layui-btn-danger btn-remove"><i class="iconfont icon-close1"></i></span>
+        <span class="layui-btn layui-btn-sm layui-btn-primary btn-dragsort"><i class="iconfont icon-yidong"></i></span>
+    </dd>
+</script>
+<script>
+layui.use(['form', 'layer'], function () {
+    var form = layui.form, 
+        layer = layui.layer,
+        $ = layui.jquery;
+
+    form.on('submit(submit)', function (data) {
+        // 提交到方法 默认为本身
+        var loading = layer.load(1, {shade: [0.1, '#fff']});
+        $.post("", data.field, function (res) {
+            layer.close(loading);
+            if (res.code > 0) {
+                layer.msg(res.msg, {time: 1800, icon: 1}, function () {
+                    parent.location.reload();
+                });
+            } else {
+                layer.msg(res.msg, {time: 1800, icon: 2});
+            }
+        });
+    })
+});
+</script>
+{/block}
