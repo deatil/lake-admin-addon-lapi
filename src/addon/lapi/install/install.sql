@@ -77,4 +77,4 @@ REPLACE INTO `pre__lapi_config` VALUES
 ('api_close','0',NULL),
 ('api_close_tip','API系统维护中',NULL),
 ('api_app_pre','API','app的appid前缀'),
-('open_putlog','0','是否启用记录日志');
+('open_putlog','1','是否启用记录日志');
