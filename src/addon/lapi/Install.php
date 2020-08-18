@@ -33,7 +33,7 @@ class Install
         }
         
         // 复制静态文件
-        $Module->installStatic("lapi");
+        $Module->installStatic("lapi", __DIR__ . '/static/');
         
         return true;
     }

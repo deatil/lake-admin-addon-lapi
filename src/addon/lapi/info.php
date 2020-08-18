@@ -11,7 +11,7 @@ return [
     'adaptation' => '2.0.2',
     'sign' => 'b15cc279e3484c13c96c2f7142e2f437',
     
-    'path' => '',
+    'path' => __DIR__,
     
     'need_module' => [],
     
