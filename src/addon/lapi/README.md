@@ -27,6 +27,7 @@ class Index extends BaseController
     // 初始化
     protected function initialize()
     {
+        parent::initialize();
         $this->checkApiSign();
     }
 }
