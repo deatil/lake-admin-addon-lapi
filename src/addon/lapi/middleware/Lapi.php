@@ -5,7 +5,7 @@ namespace app\lapi\middleware;
 use Closure;
 use think\App;
 
-use app\lapi\trait\Lapi as LapiTrait;
+use app\lapi\traits\Lapi as LapiTrait;
 
 /*
  * API检测中间件

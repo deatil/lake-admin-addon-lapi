@@ -1,10 +1,10 @@
 <?php
 
-namespace app\lapi\boot;
+namespace app\lapi\contracts;
 
 use lake\module\controller\HomeBase;
 
-use app\lapi\trait\Lapi as LapiTrait;
+use app\lapi\traits\Lapi as LapiTrait;
 
 /*
  * API基础类

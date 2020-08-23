@@ -2,8 +2,6 @@
 
 namespace app\lapi;
 
-use think\facade\Db;
-
 use lake\Module;
 
 /**
