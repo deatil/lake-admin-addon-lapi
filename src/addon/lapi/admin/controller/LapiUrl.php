@@ -4,8 +4,8 @@ namespace app\admin\controller;
 
 use lake\Tree;
 
-use app\admin\facade\Module as ModuleFacade;
-use app\admin\model\Module as ModuleModel;
+use lake\admin\facade\Module as ModuleFacade;
+use lake\admin\model\Module as ModuleModel;
 
 use app\lapi\model\LapiUrl as LapiUrlModel;
 use app\lapi\lib\ApiFileDoc;
