@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use lake\Tree;
+use lake\TTree;
 
 use lake\admin\facade\Module as ModuleFacade;
 use lake\admin\model\Module as ModuleModel;
@@ -28,9 +28,6 @@ class LapiUrl extends LapiBase
     public function index()
     {
         if ($this->request->isAjax()) {
-            $tree = new Tree();
-            $tree->icon = ['', '', ''];
-            $tree->nbsp = '';
             $result = LapiUrlModel::order([
                     'listorder' => 'ASC', 
                     'id' => 'ASC',
@@ -38,8 +35,9 @@ class LapiUrl extends LapiBase
                 ->select()
                 ->toArray();
 
-            $tree->init($result);
-            $list = $tree->getTreeList($tree->getTreeArray(0), 'title');
+            $TTree = new TTree();
+            $TTree->withData($result);
+            $list = $TTree->buildFormatList($TTree->buildArray(0), 'title');
             $total = count($list);
             
             $result = [
@@ -124,16 +122,12 @@ class LapiUrl extends LapiBase
                 'listorder', 
                 'id' => 'DESC',
             ])->select()->toArray();
-            $array = array();
-            foreach ($result as $r) {
-                $r['selected'] = ($r['id'] == $parentid) ? 'selected' : '';
-                $array[] = $r;
-            }
-            $str = "<option value='\$id' \$selected>\$spacer \$title</option>";
-            $tree = new Tree();
-            $tree->init($array);
-            $parents = $tree->getTree(0, $str);
+
+            $TTree = new TTree();
+            $data = $TTree->withData($result)->buildArray(0);
+            $parents = $TTree->buildFormatList($data, 'title');
             $this->assign("parents", $parents);
+            $this->assign("parentid", $parentid);
             
             return $this->fetch();
         }
@@ -192,13 +186,13 @@ class LapiUrl extends LapiBase
             ->find();
             $this->assign('info', $info);
             
-            $tree = new Tree();
+            $TTree = new TTree();
             $result = LapiUrlModel::order([
                 'listorder' => 'ASC', 
                 'id' => 'DESC',
             ])->select()->toArray();
             
-            $childsId = $tree->getChildsId($result, $info['id']);
+            $childsId = $TTree->getListChildsId($result, $info['id']);
             $childsId[] = $info['id'];
             
             $array = [];
@@ -207,13 +201,11 @@ class LapiUrl extends LapiBase
                     continue;
                 }
                 
-                $r['selected'] = ($r['id'] == $info['parentid']) ? 'selected' : '';
                 $array[] = $r;
             }
             
-            $str = "<option value='\$id' \$selected>\$spacer \$title</option>";
-            $tree->init($array);
-            $parents = $tree->getTree(0, $str);
+            $data = $TTree->withData($array)->buildArray(0);
+            $parents = $TTree->buildFormatList($data, 'title');
             $this->assign("parents", $parents);
             
             return $this->fetch();
@@ -422,6 +414,7 @@ class LapiUrl extends LapiBase
         }
         
         if ($module == 'api') {
+            $moduleApiName = '默认API应用';
             $apiPath = root_path() . 'app/api/controller';
         } else {
             $moduleData = ModuleModel::where([
@@ -438,6 +431,7 @@ class LapiUrl extends LapiBase
                 $modulePath2 = $modulePath . $moduleData['module'];
             }
             
+            $moduleApiName = $moduleData['name'];
             $apiPath = $modulePath2 . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR . 'controller';
         }
         
@@ -453,7 +447,7 @@ class LapiUrl extends LapiBase
             $parentId = $moduleInfo['id'];
         } else {
             $parentId = LapiUrlModel::insertUrl([
-                'title' => $module,
+                'title' => $moduleApiName,
                 'url' => $module,
                 'method' => 'GET',
             ]);

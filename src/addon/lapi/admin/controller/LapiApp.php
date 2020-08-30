@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use lake\Tree;
+use lake\TTree;
 
 use app\lapi\model\LapiApp as LapiAppModel;
 use app\lapi\model\LapiConfig as LapiConfigModel;
@@ -308,10 +308,6 @@ class LapiApp extends LapiBase
             
             $this->assign('id', $id);
             
-            $tree = new Tree();
-            $tree->icon = ['', '', ''];
-            $tree->nbsp = '';
-            
             $auTableName = (new LapiUrlModel())->getName();
             $result = LapiUrlAccessModel::alias('aua')
                 ->join($auTableName . ' au', 'au.id = aua.url_id', 'left')
@@ -328,9 +324,10 @@ class LapiApp extends LapiBase
                 ])
                 ->select()
                 ->toArray();
-
-            $tree->init($result);
-            $list = $tree->getTreeList($tree->getTreeArray(0), 'title');
+            
+            $TTree = new TTree();
+            $TTree->withData($result);
+            $list = $TTree->buildFormatList($TTree->buildArray(0), 'title');
             $total = count($list);
             
             $result = [

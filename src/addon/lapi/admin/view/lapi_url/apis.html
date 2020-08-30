@@ -12,7 +12,7 @@
 {block name="script"}
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <a class="layui-btn layui-btn-sm js-module-action-btn" href="javascript:;" data-url="{:url('apisupdate')}" data-module="api">更新API应用</a>
+        <a class="layui-btn layui-btn-sm js-module-action-btn" href="javascript:;" data-url="{:url('apisupdate')}" data-module="api">更新默认API应用</a>
     </div>
 </script>
 
@@ -90,9 +90,7 @@ layui.use(['table', 'upload'], function() {
             $.post(url, {module: module},function(res){
                 layer.close(loading);
                 if (res.code === 1) {
-                    layer.msg(res.msg, {time:1000, icon:1}, function() {
-                        location.reload();
-                    });
+                    layer.msg(res.msg, {time:1000, icon:1});
                 }else{
                     layer.msg(res.msg, {time:1000, icon:2});
                 }
