@@ -14,6 +14,44 @@
 *  进入后台安装该模块
 
 
+### 模块内 `api` 文件方法设置
+
+*  方法设置
+~~~
+<?php
+
+namespace app\api\controller;
+
+/**
+ * @title 接口标题[必需]
+ * @description 接口描述
+ */
+class Index
+{
+    /**
+     * 接口方法
+     *
+     * @title 接口方法标题[必需]
+     * @method GET[必需]
+     * @request {"a":"c"}
+     * @response {"d":"e"}
+     * @description 接口方法描述
+     * @listorder 100
+     * @status 1
+     */
+    public function index()
+    {
+        return json([
+            'code' => 0,
+            'msg' => 'hello world!',
+            'data' => 'api data',
+        ]);
+    }
+}
+
+~~~
+
+
 ### 模块内使用 
 
 *  `trait` 引用

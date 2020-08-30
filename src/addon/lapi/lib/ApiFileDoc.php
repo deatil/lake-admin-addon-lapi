@@ -58,8 +58,8 @@ class ApiFileDoc
                     foreach ($classFileDoc['method'] as $classFileDocMethod) {
                         $methodName = $classFileDocMethod['name'];
                         
-                        $layeClassName = substr($classNamespacename, strlen($apiControllerNamespace . '\\'));
-                        $className = (!empty($layeClassName) ? $layeClassName . '/' : '') . $classShortname;
+                        $layerClassName = substr($classNamespacename, strlen($apiControllerNamespace . '\\'));
+                        $className = (!empty($layerClassName) ? $layerClassName . '/' : '') . $classShortname;
                         $className = str_replace('\\', '/', $className);
                         
                         $url = 'api/'.$className.'/'.$methodName;
