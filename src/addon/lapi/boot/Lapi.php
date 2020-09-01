@@ -2,7 +2,7 @@
 
 namespace app\lapi\contracts;
 
-use lake\module\controller\HomeBase;
+use Lake\Module\Controller\HomeBase;
 
 use app\lapi\traits\Lapi as LapiTrait;
 

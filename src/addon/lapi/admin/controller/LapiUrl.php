@@ -2,10 +2,10 @@
 
 namespace app\admin\controller;
 
-use lake\TTree;
+use Lake\TTree;
 
-use lake\admin\facade\Module as ModuleFacade;
-use lake\admin\model\Module as ModuleModel;
+use Lake\Admin\Facade\Module as ModuleFacade;
+use Lake\Admin\Model\Module as ModuleModel;
 
 use app\lapi\model\LapiUrl as LapiUrlModel;
 use app\lapi\lib\ApiFileDoc;

@@ -4,7 +4,7 @@ namespace app\lapi;
 
 use think\facade\Db;
 
-use lake\Module;
+use Lake\Module;
 
 /**
  * 安装脚本

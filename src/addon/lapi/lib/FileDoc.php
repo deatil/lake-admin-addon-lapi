@@ -7,7 +7,7 @@ use ReflectionMethod;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-use lake\Doc;
+use Lake\Doc;
 
 /**
  * 文件注释解析

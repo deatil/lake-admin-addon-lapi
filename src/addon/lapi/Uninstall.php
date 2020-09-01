@@ -2,7 +2,7 @@
 
 namespace app\lapi;
 
-use lake\Module;
+use Lake\Module;
 
 /**
  * 卸载脚本

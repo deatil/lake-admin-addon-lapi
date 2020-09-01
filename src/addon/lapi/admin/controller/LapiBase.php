@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use lake\module\controller\AdminBase;
+use Lake\Module\Controller\AdminBase;
 
 /*
  * 公共类

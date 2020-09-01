@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use lake\TTree;
+use Lake\TTree;
 
 use app\lapi\model\LapiApp as LapiAppModel;
 use app\lapi\model\LapiConfig as LapiConfigModel;

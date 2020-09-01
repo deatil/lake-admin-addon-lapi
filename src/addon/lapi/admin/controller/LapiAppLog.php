@@ -2,7 +2,7 @@
 
 namespace app\admin\controller;
 
-use lake\HttpUserAgent;
+use Lake\HttpUserAgent;
 
 use app\lapi\model\LapiApp as LapiAppModel;
 use app\lapi\model\LapiAppLog as LapiAppLogModel;
