@@ -12,6 +12,7 @@
 *  正确安装了 `lake-admin` 后台
 *  `composer require lake/lake-admin-addon-lapi`，然后选择最新版本
 *  进入后台安装该模块
+*  请求示例：http://yourdomain.com/api/Index/index?name=name2&app_id=API2020090322513090789&nonce_str=6V0RVgWV9uCJXncv&timestamp=1599145016&sign=E3728BEEE2A5753CAD2556EA00C92A86
 
 
 ### 模块内 `api` 文件方法设置

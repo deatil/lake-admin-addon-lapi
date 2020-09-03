@@ -109,6 +109,10 @@ class Lapi
                 
                 $sign = $header['sign'];
             } else {
+                if (!isset($data['sign'])) {
+                    return $this->errorJson("签名错误", 99);
+                }
+                
                 $sign = $data['sign'];
             }
 
