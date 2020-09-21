@@ -29,7 +29,7 @@ class Lapi
      * @create 2020-8-12
      * @author deatil
      */
-    public function checkApiSign()
+    public function checkApi()
     {
         // api设置
         $appConfig = LapiConfigModel::getList();
@@ -276,9 +276,9 @@ class Lapi
         if ($app['allow_origin'] == 1) {
             $header['Access-Control-Allow-Origin']  = '*';
             $header['Access-Control-Allow-Headers'] = 'X-Requested-With,X_Requested_With,Content-Type';
+            $header['Access-Control-Allow-Methods'] = 'GET,POST,PATCH,PUT,DELETE,OPTIONS';
         }
         
-        $header['Access-Control-Allow-Methods'] = 'GET,POST,PATCH,PUT,DELETE,OPTIONS';
         $response = Response::create($result, $type)->header($header);
         throw new HttpResponseException($response);
     }

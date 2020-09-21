@@ -10,7 +10,7 @@ if (!function_exists('lapi_check_api_sign')) {
      * @author deatil
      */
     function lapi_check_api_sign() {
-        return LapiFacade::checkApiSign();
+        return LapiFacade::checkApi();
     }
 }
 

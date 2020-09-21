@@ -33,9 +33,7 @@ class Lapi
      */
     public function handle($request, Closure $next)
     {
-        $module = $this->app->http->getName();
-        
-        $this->checkApiSign();
+        $this->checkApi();
         
         return $this->app->middleware->pipeline('app')
             ->send($request)
