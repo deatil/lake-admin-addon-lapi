@@ -439,7 +439,7 @@ class LapiUrl extends LapiBase
             $this->error('模块无api接口，已退出！');
         }
         
-        $ApiFileDoc = new apiFileDoc();
+        $ApiFileDoc = new ApiFileDoc();
         $apiList = $ApiFileDoc->parsePath($apiPath);
         
         $moduleInfo = LapiUrlModel::getDataByUrl($module);
