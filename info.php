@@ -7,13 +7,11 @@ return [
     'author' => 'deatil',
     'authorsite' => 'http://github.com/deatil',
     'authoremail' => 'deatil@github.com',
-    'version' => '2.0.2',
-    'adaptation' => '2.0.2',
+    'version' => '2.0.3',
+    'adaptation' => '2.3.27',
     
     'path' => __DIR__,
-    
     'need_module' => [],
-    
     'setting' => [],
     
     // 事件

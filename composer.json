@@ -11,7 +11,7 @@
         "api",
         "lapi"
     ],
-    "homepage": "https://github.com/deatil",
+    "homepage": "https://github.com/deatil/lake-admin-addon-lapi",
     "authors": [
         {
             "name": "deatil",
@@ -25,15 +25,13 @@
     },
     "autoload": {
         "psr-4": {
-            "app\\lapi\\": "src/addon/lapi"
-        },
-        "files": [
-        ]
+            "app\\lapi\\": ""
+        }
     },
     "extra": {
         "think":{
             "services":[
-                "app\\lapi\\boot\\Service"
+                "app\\lapi\\Service"
             ]
         }
     }
